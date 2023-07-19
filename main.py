@@ -7,7 +7,7 @@ from wtforms.validators import DataRequired
 import requests
 
 
-MOVIE_DB_API_KEY = "https://api.themoviedb.org/3/search/movie"
+# MOVIE_DB_API_KEY = ""
 MOVIE_DB_SEARCH_URL = "https://api.themoviedb.org/3/search/movie"
 MOVIE_DB_INFO_URL = "https://api.themoviedb.org/3/movie"
 MOVIE_DB_IMAGE_URL = "https://image.tmdb.org/t/p/w500"
@@ -93,13 +93,6 @@ def home():
         all_movies[i].ranking = len(all_movies) - i
     db.session.commit()
     return render_template("index.html", movies=all_movies)
-
-
-# New Add Route
-# @app.route("/add", methods=["GET", "POST"])
-# def add_movie():
-#     form = FindMovieForm()
-#     return render_template("add.html", form=form)
 
 
 @app.route("/edit", methods=["GET", "POST"])
