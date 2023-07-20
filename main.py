@@ -7,7 +7,7 @@ from wtforms.validators import DataRequired
 import requests
 
 
-# MOVIE_DB_API_KEY = ""
+MOVIE_DB_API_KEY = "85a875456848a2e6de329d232c52afe7"
 MOVIE_DB_SEARCH_URL = "https://api.themoviedb.org/3/search/movie"
 MOVIE_DB_INFO_URL = "https://api.themoviedb.org/3/movie"
 MOVIE_DB_IMAGE_URL = "https://image.tmdb.org/t/p/w500"
@@ -87,11 +87,12 @@ class FindMovieForm(FlaskForm):
 @app.route("/")
 def home():
     result = db.session.execute(db.select(Movie).order_by(Movie.rating))
-    all_movies = result.scalars()
+    all_movies = result.scalars().all()  # convert ScalarResult to Python List
 
     for i in range(len(all_movies)):
         all_movies[i].ranking = len(all_movies) - i
     db.session.commit()
+
     return render_template("index.html", movies=all_movies)
 
 
