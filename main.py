@@ -29,9 +29,10 @@ class Movie(db.Model):
     title = db.Column(db.String(250), unique=True, nullable=False)
     year = db.Column(db.Integer, nullable=False)
     description = db.Column(db.String(500), nullable=False)
-    rating = db.Column(db.Float, nullable=True)
-    ranking = db.Column(db.Integer, nullable=True)
-    review = db.Column(db.String(250), nullable=True)
+
+    rating = db.Column(db.Float, nullable=False, default=-1.0)  # Значение по умолчанию: -1.0
+    ranking = db.Column(db.Integer, nullable=False, default=0)  # Значение по умолчанию: 0
+    review = db.Column(db.String(250), nullable=True, default=None)  # Значение по умолчанию: None
     img_url = db.Column(db.String(250), nullable=False)
 
 
@@ -87,7 +88,10 @@ def find_movie():
             # The data in release_date includes month and day, we will want to get rid of.
             year=data["release_date"].split("-")[0],
             img_url=f"{MOVIE_DB_IMAGE_URL}{data['poster_path']}",
-            description=data["overview"]
+            description=data["overview"],
+            rating=None,  # Explicitly set the 'rating' to None
+            ranking=None,  # Explicitly set the 'ranking' to None
+            review=None,  # Explicitly set the 'review' to None
         )
         db.session.add(new_movie)
         db.session.commit()
@@ -114,6 +118,14 @@ def delete_movie():
     db.session.delete(movie)
     db.session.commit()
     return redirect(url_for("home"))
+
+# # Удалите существующую таблицу (Будьте осторожны, это удалит все данные в таблице)
+# with app.app_context():
+#     db.drop_all()
+#
+# # Пересоздайте таблицу с обновленным определением модели
+# with app.app_context():
+#     db.create_all()
 
 
 if __name__ == '__main__':
